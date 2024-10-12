@@ -1,32 +1,54 @@
 pipeline {
     agent any
+    environment {
+        // Set Node.js version or other environment variables if necessary
+        NODE_HOME = tool name: 'NodeJS 14', type: 'NodeJS'
+        PATH = "${NODE_HOME}/bin:${env.PATH}"
+    }
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                echo 'Cloning repository...'
-                // Not necessary to clone again in Jenkins pipeline
+                // Checkout your GitHub repository
+                git url: 'https://github.com/chauhanpranay19/simple-reactjs-app.git'
             }
         }
+
+        stage('Install Dependencies') {
+            steps {
+                // Install Node.js dependencies
+                bat 'npm install'
+            }
+        }
+
         stage('Build') {
             steps {
-                echo 'Building application...'
-                // Replace with your actual build command
-                sh 'npm install'  // Example for a React app
-                sh 'npm run build'  // Example for a React app
+                // Build the React.js project
+                bat 'npm run build'
             }
         }
+
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // Replace with your actual test command
-                sh 'npm test'  // Example for a React app
+                // Run tests if applicable
+                bat 'npm test'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying application...'
-                // Replace with your actual deploy command
+                // You can define deployment steps here (e.g., copying files, starting server, etc.)
+                // Example: Copy build files to a specific deployment directory
+                bat 'xcopy /s /i build C:\\path\\to\\deployment\\directory'
             }
         }
     }
+    post {
+        success {
+            echo 'Build completed successfully!'
+        }
+        failure {
+            echo 'Build failed. Please check the logs.'
+        }
+    }
 }
+
