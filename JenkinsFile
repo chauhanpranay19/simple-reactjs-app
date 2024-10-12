@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone') {
+            steps {
+                echo 'Cloning repository...'
+                // Not necessary to clone again in Jenkins pipeline
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building application...'
+                // Replace with your actual build command
+                sh 'npm install'  // Example for a React app
+                sh 'npm run build'  // Example for a React app
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Replace with your actual test command
+                sh 'npm test'  // Example for a React app
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                // Replace with your actual deploy command
+            }
+        }
+    }
+}
